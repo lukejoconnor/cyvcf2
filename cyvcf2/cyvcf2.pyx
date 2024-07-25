@@ -1528,9 +1528,13 @@ cdef class Variant(object):
             raise Exception("couldn't get genotypes for variant")
         if nret != 2 * n_samples:
             raise Exception("assumes diploid data")
-        cdef np.ndarray alt_allele_carriers
-        alt_allele_carriers, _ = np.where(np.asarray(gts) == 1)
-        return alt_allele_carriers
+        cdef int[:] genotype_array = np.empty(nret, dtype=np.int8)
+        cdef int i
+        for i in range(nret):
+            genotype_array[i] = gts[i]
+        # cdef np.ndarray alt_allele_carriers
+        # alt_allele_carriers, _ = np.where(np.array(gts) == 1)
+        return genotype_array
 
     def set_pos(self, int pos0):
         """
