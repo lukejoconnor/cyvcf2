@@ -1519,22 +1519,23 @@ cdef class Variant(object):
         -------
 
         """
-        cdef int nret, ndst
-        cdef int32_t *gts = NULL
-        cdef int n_samples = self.vcf.n_samples
-        #self._genotypes = []
-        nret = bcf_get_genotypes(self.vcf.hdr, self.b, &gts, &ndst)
-        if nret < 0:
-            raise Exception("couldn't get genotypes for variant")
-        if nret != 2 * n_samples:
-            raise Exception("assumes diploid data")
-        cdef int[:] genotype_array = np.empty(nret, dtype=np.intc)
-        cdef int i
-        for i in range(nret):
-            genotype_array[i] = gts[i]
-        # cdef np.ndarray alt_allele_carriers
-        # alt_allele_carriers, _ = np.where(np.array(gts) == 1)
-        return genotype_array
+        return None
+        # cdef int nret, ndst
+        # cdef int32_t *gts = NULL
+        # cdef int n_samples = self.vcf.n_samples
+        # #self._genotypes = []
+        # nret = bcf_get_genotypes(self.vcf.hdr, self.b, &gts, &ndst)
+        # if nret < 0:
+        #     raise Exception("couldn't get genotypes for variant")
+        # if nret != 2 * n_samples:
+        #     raise Exception("assumes diploid data")
+        # cdef int[:] genotype_array = np.empty(nret, dtype=np.intc)
+        # cdef int i
+        # for i in range(nret):
+        #     genotype_array[i] = gts[i]
+        # # cdef np.ndarray alt_allele_carriers
+        # # alt_allele_carriers, _ = np.where(np.array(gts) == 1)
+        # return genotype_array
 
     def set_pos(self, int pos0):
         """
