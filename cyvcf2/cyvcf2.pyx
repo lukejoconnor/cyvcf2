@@ -1532,7 +1532,7 @@ cdef class Variant(object):
         for i in range(nret):
             genotype_array[i] = gts[i]
         cdef np.ndarray alt_allele_carriers
-        alt_allele_carriers, _ = np.where(genotype_array == 1)
+        alt_allele_carriers, _ = np.where(np.asarray(genotype_array) == 1)
         return alt_allele_carriers
 
     def set_pos(self, int pos0):
