@@ -1512,6 +1512,26 @@ cdef class Variant(object):
                 raise Exception("error setting genotypes with: %s" % gts)
             stdlib.free(cgts)
 
+    def sparse_phased_gt(self):
+        """
+        Returns a vector of indices indicating the phased haplotypes that carry an alternative allele. Assumes that
+        all samples are phased. Sample k corresponds to indices 2k and 2k+1. Returns a numpy array of indices.
+        -------
+
+        """
+        cdef int nret, ndst
+        cdef int32_t *gts = NULL
+        cdef int n_samples = self.vcf.n_samples
+        #self._genotypes = []
+        nret = bcf_get_genotypes(self.vcf.hdr, self.b, &gts, &ndst)
+        if nret < 0:
+            raise Exception("couldn't get genotypes for variant")
+        if nret != 2 * n_samples:
+            raise Exception("assumes diploid data")
+        cdef np.ndarray alt_allele_carriers
+        alt_allele_carriers, _ = np.where(np.asarray(gts) == 1)
+        return alt_allele_carriers
+
     def set_pos(self, int pos0):
         """
         set the POS to the given 0-based position
